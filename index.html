@@ -1,649 +1,390 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050B1F">
+<meta name="format-detection" content="telephone=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="V-Sim">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>V-Sim – SIM Transfer Prototype</title>
+<title>V-Sim – Phone Switch Guide</title>
 <style>
   :root{
-    --bg:#050B1F; --bg2:#0A1433; --card:#0E1B40; --card2:#122250;
+    --bg:#050B1F; --bg2:#0A1433; --card:#0E1B40;
     --line:rgba(120,170,255,.16); --text:#EAF2FF; --muted:#8CA0C8;
     --cyan:#22D3EE; --blue:#3B82F6; --green:#34D399; --red:#F87171; --amber:#FBBF24;
-    --grad:linear-gradient(135deg,#22D3EE 0%,#3B82F6 100%);
-    --r:20px;
+    --grad:linear-gradient(135deg,#22D3EE 0%,#3B82F6 100%); --r:20px;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased}
-  body{
-    background:
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{background:
       radial-gradient(900px 500px at 85% -10%,rgba(34,211,238,.14),transparent 60%),
-      radial-gradient(700px 500px at -10% 110%,rgba(59,130,246,.18),transparent 60%),
-      var(--bg);
-    display:flex;justify-content:center;
-  }
-  .app{width:100%;max-width:460px;min-height:100%;display:flex;flex-direction:column;
-    padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-  .banner{margin:10px 16px 0;padding:8px 12px;border:1px dashed rgba(251,191,36,.5);
-    background:rgba(251,191,36,.08);color:#FDE68A;font-size:12px;line-height:1.35;border-radius:12px;text-align:center}
-  .banner b{color:#FCD34D;letter-spacing:.08em}
-  main{flex:1;position:relative;overflow:hidden}
-  .screen{position:absolute;inset:0;overflow-y:auto;padding:18px 16px 28px;display:none;
-    -webkit-overflow-scrolling:touch}
-  .screen.active{display:block;animation:enter .45s cubic-bezier(.2,.8,.2,1)}
-  @keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+      radial-gradient(700px 500px at -10% 110%,rgba(59,130,246,.18),transparent 60%),var(--bg);
+    display:flex;justify-content:center}
+  .app{width:100%;max-width:520px;min-height:100%;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+  .banner{margin:10px 16px 0;padding:8px 12px;border:1px dashed rgba(251,191,36,.5);background:rgba(251,191,36,.08);
+    color:#FDE68A;font-size:12px;line-height:1.4;border-radius:12px;text-align:center}
+  main{flex:1;padding:18px 16px 40px}
+  .screen{display:none}
+  .screen.active{display:block;animation:enter .4s cubic-bezier(.2,.8,.2,1)}
+  @keyframes enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
   @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-
-  /* Logo */
   .brand{display:flex;align-items:center;gap:10px}
-  .logo{width:40px;height:40px;border-radius:12px;background:var(--grad);display:grid;place-items:center;
-    box-shadow:0 8px 24px rgba(34,211,238,.35)}
+  .logo{width:40px;height:40px;border-radius:12px;background:var(--grad);display:grid;place-items:center;box-shadow:0 8px 24px rgba(34,211,238,.35)}
   .logo svg{width:24px;height:24px}
   .wordmark{font-weight:800;font-size:24px;letter-spacing:.14em}
   .wordmark span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .tag{color:var(--muted);font-size:13px;margin:6px 0 18px}
-
-  .card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);
-    border-radius:var(--r);padding:16px;margin-bottom:14px}
+  h1{font-size:26px;margin:18px 0 8px;letter-spacing:-.01em;line-height:1.2}
+  h2{font-size:21px;margin:6px 0 6px;line-height:1.25}
+  p.sub{color:var(--muted);font-size:15px;line-height:1.55;margin:0 0 16px}
+  .card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
   .label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-  .device-row{display:flex;align-items:center;gap:14px}
-  .dev-ico{width:48px;height:48px;border-radius:14px;background:rgba(34,211,238,.1);border:1px solid var(--line);
-    display:grid;place-items:center;flex:none}
-  .dev-ico svg{width:26px;height:26px;stroke:var(--cyan);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-  .dev-name{font-weight:650;font-size:16px}
-  .dev-sub{font-size:13px;color:var(--muted);margin-top:2px}
-  .pill{margin-left:auto;font-size:11px;padding:4px 9px;border-radius:99px;background:rgba(52,211,153,.12);
-    color:var(--green);border:1px solid rgba(52,211,153,.3);white-space:nowrap}
-  .pill::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:6px;
-    animation:pulse 1.8s infinite}
-  @keyframes pulse{50%{opacity:.3}}
-
-  .btn{width:100%;border:0;border-radius:16px;padding:17px 18px;font-size:17px;font-weight:700;color:#04101F;
-    background:var(--grad);cursor:pointer;position:relative;overflow:hidden;
-    box-shadow:0 10px 30px rgba(34,211,238,.28);transition:transform .15s,box-shadow .2s,opacity .2s}
+  .btn{width:100%;border:0;border-radius:16px;padding:18px;font-size:18px;font-weight:700;color:#04101F;background:var(--grad);
+    cursor:pointer;box-shadow:0 10px 30px rgba(34,211,238,.28);transition:transform .15s,opacity .2s}
   .btn:active{transform:scale(.98)}
-  .btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
-  .btn.hero{padding:22px 18px;font-size:19px}
-  .btn.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);
-    transform:translateX(-120%);animation:shine 3.5s infinite}
-  @keyframes shine{60%,100%{transform:translateX(120%)}}
   .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line);box-shadow:none}
-  .btn.danger{background:transparent;color:var(--red);border:1px solid rgba(248,113,113,.4);box-shadow:none}
   .btn-row{display:flex;flex-direction:column;gap:10px;margin-top:14px}
-
-  .link{background:none;border:0;color:var(--cyan);font-size:13px;cursor:pointer;padding:6px 0;text-decoration:underline;text-underline-offset:3px}
-  .topbar{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-  .back{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);
-    font-size:20px;cursor:pointer;display:grid;place-items:center}
-  h1{font-size:24px;margin:4px 0 6px;letter-spacing:-.01em}
-  p.sub{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 16px}
-
-  /* History */
-  .hist{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
-  .hist:first-of-type{border-top:0}
-  .hist .dot{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;font-size:15px}
-  .dot.ok{background:rgba(52,211,153,.12);color:var(--green)}
-  .dot.fail{background:rgba(248,113,113,.12);color:var(--red)}
-  .dot.cancel{background:rgba(251,191,36,.12);color:var(--amber)}
-  .hist .t{font-size:14px;font-weight:600}
-  .hist .s{font-size:12px;color:var(--muted);margin-top:2px}
-  .hist .r{margin-left:auto;font-size:11px;color:var(--muted);text-align:right}
-  .empty{color:var(--muted);font-size:13px;padding:8px 0}
-
-  /* Device picker */
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .opt{border:1.5px solid var(--line);background:var(--card);border-radius:16px;padding:14px 10px;color:var(--text);
-    display:flex;flex-direction:column;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer;
-    transition:border-color .2s,background .2s,transform .15s}
-  .opt svg{width:28px;height:28px;stroke:var(--muted);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
-  .opt:active{transform:scale(.97)}
-  .opt.sel{border-color:var(--cyan);background:rgba(34,211,238,.08);box-shadow:0 0 0 3px rgba(34,211,238,.12)}
-  .opt.sel svg{stroke:var(--cyan)}
-
-  /* PIN */
-  .pins{display:flex;gap:8px;justify-content:center;margin:6px 0 8px}
-  .pins input{width:100%;max-width:56px;height:62px;text-align:center;font-size:26px;font-weight:700;color:var(--text);
-    background:var(--card);border:1.5px solid var(--line);border-radius:14px;outline:none;caret-color:var(--cyan);
-    transition:border-color .2s,box-shadow .2s;padding:0;font-family:inherit}
-  .pins input:focus{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(34,211,238,.15)}
-  .pins.error input{border-color:var(--red);box-shadow:0 0 0 3px rgba(248,113,113,.12)}
-  .pins.shake{animation:shake .45s}
-  @keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
-  .msg{min-height:22px;font-size:13.5px;text-align:center;margin:6px 0 4px;color:var(--muted)}
-  .msg.err{color:var(--red)}
-  .hint{font-size:12.5px;color:var(--muted);text-align:center;background:rgba(34,211,238,.06);border:1px dashed var(--line);
-    border-radius:12px;padding:10px;margin-top:8px;line-height:1.5}
-  .hint b{color:var(--cyan);letter-spacing:.15em}
-  select{width:100%;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:16px;font-family:inherit}
-
-  /* Transfer */
-  .route{display:flex;align-items:center;gap:8px;margin:6px 0 18px}
-  .node{flex:1;text-align:center}
-  .node .dev-ico{margin:0 auto 8px;width:56px;height:56px}
-  .node .n{font-size:13px;font-weight:600}
-  .node .m{font-size:11px;color:var(--muted)}
-  .beam{flex:1.1;height:2px;position:relative;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:34px}
-  .beam i{position:absolute;top:0;left:-40%;width:40%;height:100%;background:var(--grad);animation:beam 1.3s linear infinite}
-  .beam.stopped i{animation:none;opacity:0}
-  @keyframes beam{to{left:100%}}
-  .bar{height:10px;border-radius:99px;background:rgba(120,170,255,.12);overflow:hidden}
-  .bar>div{height:100%;width:0;background:var(--grad);border-radius:99px;box-shadow:0 0 18px rgba(34,211,238,.6)}
-  .pct{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:8px 2px 16px}
-  .step{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line);opacity:.5;transition:opacity .3s}
-  .step:first-child{border-top:0}
-  .step.active,.step.done,.step.failed{opacity:1}
-  .sicon{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;flex:none;font-size:13px;font-weight:700;color:var(--muted)}
-  .step.active .sicon{border-color:var(--cyan);color:var(--cyan);border-top-color:transparent;animation:spin 1s linear infinite;font-size:0}
-  .step.done .sicon{background:var(--green);border-color:var(--green);color:#04101F}
-  .step.failed .sicon{background:var(--red);border-color:var(--red);color:#04101F}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .step .st{font-size:15px;font-weight:600}
-  .step .sd{font-size:12.5px;color:var(--muted);margin-top:2px}
-
-  /* Result */
-  .result{text-align:center;padding-top:10px}
-  .badge{width:104px;height:104px;margin:6px auto 16px;position:relative}
-  .badge svg{width:100%;height:100%}
-  .ring{fill:none;stroke-width:4;stroke-dasharray:302;stroke-dashoffset:302;animation:draw .8s .1s ease forwards;stroke-linecap:round}
-  .tick{fill:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:70;stroke-dashoffset:70;animation:draw .5s .7s ease forwards}
-  @keyframes draw{to{stroke-dashoffset:0}}
-  .badge.ok::before{content:"";position:absolute;inset:-14px;border-radius:50%;border:2px solid var(--green);opacity:0;animation:ripple 1.6s .8s ease-out 2}
-  @keyframes ripple{0%{opacity:.6;transform:scale(.8)}100%{opacity:0;transform:scale(1.4)}}
-  .result h1{font-size:26px}
-  .summary{text-align:left;margin-top:16px}
-  .row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line);font-size:14px}
-  .row:first-of-type{border-top:0}
-  .row span:first-child{color:var(--muted)}
-  .row span:last-child{font-weight:600;text-align:right}
-  .note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:12px;text-align:center}
-  .confetti{position:fixed;top:-12px;width:8px;height:14px;border-radius:2px;z-index:5;pointer-events:none;animation:fall linear forwards}
-  @keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.9}}
-
-  /* Modal */
-  .modal{position:fixed;inset:0;background:rgba(2,6,20,.75);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;z-index:10}
-  .modal.show{display:flex}
-  .sheet{width:100%;max-width:460px;max-height:88vh;overflow-y:auto;background:var(--bg2);border:1px solid var(--line);
-    border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));animation:up .35s cubic-bezier(.2,.8,.2,1)}
-  @keyframes up{from{transform:translateY(40px);opacity:0}}
-  .sheet h2{margin:0 0 6px;font-size:20px}
-  .sheet h3{font-size:14px;color:var(--cyan);margin:16px 0 4px}
-  .sheet p,.sheet li{font-size:13.5px;line-height:1.55;color:#C5D3F0}
-  .sheet ul{padding-left:18px;margin:4px 0}
-  .center-sheet{align-items:center;padding:20px}
-  .center-sheet .sheet{border-radius:22px;max-width:380px}
-  .footer{text-align:center;font-size:11px;color:var(--muted);padding:6px 16px 14px}
+  .link{background:none;border:0;color:var(--cyan);font-size:14px;cursor:pointer;padding:8px 0;text-decoration:underline;text-underline-offset:3px}
+  .topbar{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .back{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);font-size:20px;cursor:pointer}
+  .dots{display:flex;gap:6px;margin-left:auto}
+  .dots i{width:22px;height:5px;border-radius:3px;background:rgba(120,170,255,.2)}
+  .dots i.on{background:var(--grad)}
+  .opts{display:grid;gap:10px;margin-top:14px}
+  .opt{display:flex;align-items:center;gap:14px;text-align:left;border:1.5px solid var(--line);background:var(--card);color:var(--text);
+    border-radius:16px;padding:16px;font-size:17px;font-weight:600;cursor:pointer;transition:border-color .2s,background .2s,transform .15s;width:100%}
+  .opt:active{transform:scale(.98)}
+  .opt:hover,.opt:focus-visible{border-color:var(--cyan);background:rgba(34,211,238,.07);outline:none}
+  .opt small{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .opt .ic{width:42px;height:42px;border-radius:12px;background:rgba(34,211,238,.1);border:1px solid var(--line);display:grid;place-items:center;flex:none;font-size:20px}
+  .how{display:grid;gap:12px;margin:6px 0 18px}
+  .how div{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;color:#C5D3F0}
+  .how b{flex:none;width:28px;height:28px;border-radius:50%;background:var(--grad);color:#04101F;display:grid;place-items:center;font-size:14px}
+  .pill{display:inline-block;font-size:12px;padding:4px 10px;border-radius:99px;background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.3);margin:0 6px 6px 0}
+  .bar{height:10px;border-radius:99px;background:rgba(120,170,255,.12);overflow:hidden;margin:10px 0 6px}
+  .bar div{height:100%;width:0;background:var(--grad);border-radius:99px;transition:width .35s ease}
+  .count{font-size:13px;color:var(--muted)}
+  .sec{margin-top:22px}
+  .sec h3{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);margin:0 0 8px}
+  .item{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line);cursor:pointer}
+  .item:first-of-type{border-top:0}
+  .chk{width:26px;height:26px;border-radius:8px;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:15px;font-weight:800;color:transparent;transition:all .2s;margin-top:1px}
+  .item.done .chk{background:var(--green);border-color:var(--green);color:#04101F}
+  .item .t{font-size:16px;font-weight:650;line-height:1.35}
+  .item.done .t{color:var(--muted);text-decoration:line-through}
+  .item .d{font-size:14px;color:var(--muted);line-height:1.5;margin-top:4px}
+  .warn{border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.06)}
+  .warn p{margin:0;font-size:14px;line-height:1.55;color:#FDE68A}
+  .footer{text-align:center;font-size:12px;color:var(--muted);line-height:1.5;padding:18px 16px 6px}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="banner"><b>PROTOTYPE</b> · Simulation only. No real SIM, eSIM, number or network is touched.</div>
+  <div class="banner">Guidance only. V-Sim is not affiliated with any carrier or phone maker. Menu names vary by software version.</div>
   <main>
 
-    <!-- 1. HOME -->
-    <section class="screen active" id="s-home" aria-label="Home">
+    <!-- HOME -->
+    <section class="screen active" id="s-home">
       <div class="brand">
-        <div class="logo" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#04101F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M10 12h5M10 16h5"/></svg>
-        </div>
+        <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#04101F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M10 12h5M10 16h5"/></svg></div>
         <div class="wordmark">V-<span>Sim</span></div>
       </div>
-      <div class="tag">Switch phones with a PIN. Keep your number.</div>
-
-      <div class="card">
-        <div class="label">Current device (sample data)</div>
-        <div class="device-row">
-          <div class="dev-ico"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></div>
-          <div>
-            <div class="dev-name">Samsung Galaxy S24</div>
-            <div class="dev-sub">Example Mobile · 5G · +44 7700 900123</div>
-          </div>
-          <div class="pill">Active</div>
-        </div>
+      <h1>Switching phones? Keep your number.</h1>
+      <p class="sub">Answer 4 quick questions and get a step-by-step checklist made for your phones. Free, no sign-up.</p>
+      <div class="how">
+        <div><b>1</b><span>Tell us your old and new phone.</span></div>
+        <div><b>2</b><span>Tell us how your SIM works today.</span></div>
+        <div><b>3</b><span>Follow your personal checklist and tick steps off.</span></div>
       </div>
-
-      <button class="btn hero" id="btn-start">Transfer my SIM</button>
-
-      <div class="card" style="margin-top:18px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div class="label" style="margin:0">Recent transfers</div>
-          <button class="link" id="btn-clear" style="font-size:12px">Reset demo</button>
-        </div>
-        <div id="history"></div>
+      <button class="btn" id="go">Start my switch</button>
+      <div class="btn-row" id="resume-row" style="display:none"><button class="btn ghost" id="resume">Continue my last checklist</button></div>
+      <div class="card" style="margin-top:20px">
+        <div class="label">Coming later</div>
+        <p style="margin:0;font-size:14px;line-height:1.55;color:#C5D3F0">One-tap SIM transfers need a mobile network or eSIM provider to approve them. V-Sim doesn't move your SIM yet. It helps you do it safely yourself.</p>
       </div>
-
-      <div style="text-align:center">
-        <button class="link" id="btn-how">How would this work for real?</button>
-      </div>
-      <div class="footer">V-Sim prototype v0.1 · Demo data only</div>
+      <div class="footer">V-Sim · Phone Switch Guide v0.2</div>
     </section>
 
-    <!-- 2. PIN -->
-    <section class="screen" id="s-pin" aria-label="Secure PIN">
+    <!-- QUESTIONS -->
+    <section class="screen" id="s-q">
       <div class="topbar">
-        <button class="back" id="pin-back" aria-label="Back">←</button>
-        <div class="label" style="margin:0 0 0 4px">Step 1 of 2 · Secure PIN</div>
+        <button class="back" id="q-back" aria-label="Back">←</button>
+        <div class="dots" id="dots"></div>
       </div>
-      <h1>Choose destination &amp; enter PIN</h1>
-      <p class="sub">Pick the phone you’re moving to, then enter the 6-digit PIN shown on it.</p>
-
-      <div class="label">Destination device</div>
-      <div class="grid" id="devgrid" role="radiogroup" aria-label="Destination device"></div>
-
-      <div class="label" style="margin-top:22px">Six-digit PIN</div>
-      <div class="pins" id="pins"></div>
-      <div class="msg" id="pin-msg" role="alert"></div>
-      <div style="text-align:center"><button class="link" id="pin-toggle">Show PIN</button></div>
-
-      <div class="hint">Demo PIN: <b>482916</b><br>Any other 6 digits counts as incorrect. Three wrong tries locks the form for 15 seconds.</div>
-
-      <div style="margin-top:14px">
-        <div class="label">Demo outcome</div>
-        <select id="outcome" aria-label="Demo outcome">
-          <option value="success">Network approves (success)</option>
-          <option value="decline">Network declines (simulate error)</option>
-        </select>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn" id="pin-go" disabled>Verify &amp; start transfer</button>
-        <button class="btn ghost" id="pin-cancel">Cancel</button>
-      </div>
+      <h2 id="q-title"></h2>
+      <p class="sub" id="q-sub"></p>
+      <div class="opts" id="q-opts"></div>
     </section>
 
-    <!-- 3. TRANSFER -->
-    <section class="screen" id="s-transfer" aria-label="Transfer in progress">
-      <div class="label">Step 2 of 2 · Simulated transfer</div>
-      <h1>Transferring…</h1>
-      <p class="sub">This is a simulation. Nothing is being sent to a real network.</p>
-
+    <!-- PLAN -->
+    <section class="screen" id="s-plan">
+      <div class="topbar">
+        <button class="back" id="p-back" aria-label="Back">←</button>
+        <div class="label" style="margin:0 0 0 4px">Your checklist</div>
+      </div>
+      <h2 id="p-title"></h2>
+      <p class="sub" id="p-sub"></p>
+      <div id="p-pills"></div>
       <div class="card">
-        <div class="route">
-          <div class="node">
-            <div class="dev-ico"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></div>
-            <div class="n">Samsung Galaxy S24</div><div class="m">Source</div>
-          </div>
-          <div class="beam" id="beam"><i></i></div>
-          <div class="node">
-            <div class="dev-ico" id="t-dest-ico"></div>
-            <div class="n" id="t-dest">—</div><div class="m">Destination</div>
-          </div>
-        </div>
-        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="bar-wrap"><div id="bar"></div></div>
-        <div class="pct"><span id="pct-label">Starting…</span><span id="pct">0%</span></div>
-        <div id="steps"></div>
+        <div class="count" id="p-count"></div>
+        <div class="bar"><div id="p-bar"></div></div>
       </div>
-
-      <button class="btn danger" id="t-cancel">Cancel transfer</button>
-    </section>
-
-    <!-- 4. COMPLETE -->
-    <section class="screen" id="s-done" aria-label="Result">
-      <div class="result">
-        <div class="badge" id="badge"></div>
-        <h1 id="r-title"></h1>
-        <p class="sub" id="r-sub"></p>
+      <div id="p-body"></div>
+      <div class="card warn sec"><p id="p-warn"></p></div>
+      <div class="btn-row">
+        <button class="btn ghost" id="p-reset">Untick everything</button>
+        <button class="btn ghost" id="p-restart">Start again with other phones</button>
       </div>
-      <div class="card summary" id="r-summary"></div>
-      <div class="note" id="r-note"></div>
-      <div class="btn-row" id="r-actions"></div>
+      <div class="footer">Always follow your carrier's own instructions if they differ from this guide.</div>
     </section>
 
   </main>
-</div>
-
-<!-- Cancel confirm -->
-<div class="modal center-sheet" id="m-cancel" role="dialog" aria-modal="true" aria-label="Confirm cancel">
-  <div class="sheet">
-    <h2>Cancel this transfer?</h2>
-    <p>The simulation will stop and nothing will be changed. You can start another demo any time.</p>
-    <div class="btn-row">
-      <button class="btn danger" id="c-yes">Yes, cancel</button>
-      <button class="btn ghost" id="c-no">Keep going</button>
-    </div>
-  </div>
-</div>
-
-<!-- How it works -->
-<div class="modal" id="m-how" role="dialog" aria-modal="true" aria-label="How it would work">
-  <div class="sheet">
-    <h2>How V-Sim could work for real</h2>
-    <p>A website alone cannot move an eSIM or phone number. This prototype only simulates the experience. A real product would need:</p>
-    <h3>1. Mobile network partnerships</h3>
-    <p>Only the carrier can authorise a number and eSIM profile moving to a new device. V-Sim would need commercial and technical agreements with each operator, and would act as an orchestrator, never the authority.</p>
-    <h3>2. eSIM provisioning (GSMA SM-DP+)</h3>
-    <ul><li>Carrier or its SM-DP+ server issues a new eSIM profile for the target device’s EID.</li><li>Profile download and activation via the phone’s Local Profile Assistant (LPA).</li><li>Old profile is deactivated only after the new one is confirmed.</li></ul>
-    <h3>3. Device compatibility</h3>
-    <p>Target devices must support eSIM and expose a supported provisioning path. A companion app or OS-level integration (Apple, Google, Samsung) would be needed to read the EID and complete activation.</p>
-    <h3>4. Backend infrastructure</h3>
-    <ul><li>Short-lived, single-use PIN service with rate limiting and expiry.</li><li>Identity and fraud checks (SIM-swap fraud is a major risk).</li><li>Carrier API gateway, audit logs, retry and rollback handling.</li><li>Privacy and regulatory compliance (e.g. UK GDPR, Ofcom rules on switching and porting).</li></ul>
-    <h3>5. Security</h3>
-    <p>PIN alone would not be enough. Real flows would add carrier-side authentication, device attestation and out-of-band user confirmation.</p>
-    <div class="btn-row"><button class="btn" id="how-close">Got it</button></div>
-  </div>
 </div>
 
 <script>
 (function(){
   "use strict";
 
-  /* ---------- Config & sample data ---------- */
-  var DEMO_PIN = "482916";
-  var MAX_TRIES = 3, LOCK_MS = 15000;
-  var SOURCE = { name:"Samsung Galaxy S24", network:"Example Mobile", number:"+44 7700 900123" };
-  var DEVICES = {
-    iphone:{ label:"iPhone",       model:"iPhone 16",       icon:'<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="3"/><path d="M10.5 5.5h3"/></svg>' },
-    samsung:{label:"Samsung",      model:"Galaxy S25",      icon:'<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><circle cx="12" cy="5.8" r=".6"/></svg>' },
-    pixel:{  label:"Google Pixel", model:"Pixel 9",         icon:'<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M7 7.5h10"/></svg>' },
-    other:{  label:"Other",        model:"Other eSIM phone",icon:'<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M12 9v5M9.5 11.5h5"/></svg>' }
+  /*PLAN_START*/
+  var PHONES = {
+    iphone:  { label:"iPhone",         icon:"📱", ios:true },
+    samsung: { label:"Samsung Galaxy", icon:"📱", ios:false },
+    pixel:   { label:"Google Pixel",   icon:"📱", ios:false },
+    other:   { label:"Other Android",  icon:"📱", ios:false }
   };
-  var STEPS = [
-    { t:"Checking compatibility",     d:"Verifying the destination supports eSIM (simulated).", ms:2200 },
-    { t:"Requesting network approval",d:"Asking Example Mobile to approve (simulated).",        ms:3000 },
-    { t:"Simulating eSIM activation", d:"Pretending to activate a profile on the new device.",  ms:2800 }
-  ];
-  var TOTAL = STEPS.reduce(function(a,s){return a+s.ms;},0);
-  var SEED = [
-    { id:"DEMO-7F2A", dest:"iPhone 15",   status:"success", ts:Date.now()-86400000*9,  sample:true },
-    { id:"DEMO-31C9", dest:"Google Pixel 8", status:"cancelled", ts:Date.now()-86400000*21, sample:true },
-    { id:"DEMO-90B4", dest:"Galaxy S23",  status:"failed",  ts:Date.now()-86400000*40, sample:true }
+
+  function addEsimSteps(newPhone){
+    if(newPhone==="iphone") return "On the new iPhone go to Settings > Mobile Service (or Cellular) > Add eSIM, then scan the QR code or use your carrier's app.";
+    if(newPhone==="samsung") return "On the new Samsung go to Settings > Connections > SIM manager > Add eSIM, then scan the QR code.";
+    if(newPhone==="pixel") return "On the new Pixel go to Settings > Network & internet > SIMs > Add SIM, then scan the QR code.";
+    return "Open Settings and look for SIMs, SIM manager or Mobile network, then choose Add eSIM and scan the QR code.";
+  }
+
+  function buildPlan(a){
+    var oldP = PHONES[a.old], newP = PHONES[a.new];
+    var sim = a.sim, tray = a.tray;
+    var physicalRoute = (tray === "yes") && (sim === "physical" || sim === "unsure");
+    var iphoneToIphone = (a.old === "iphone" && a.new === "iphone" && sim === "esim");
+    var method, methodName;
+    if(physicalRoute){ method = "swap"; methodName = "Move your physical SIM card"; }
+    else if(iphoneToIphone){ method = "iphone-esim"; methodName = "Transfer your eSIM between iPhones"; }
+    else { method = "carrier-esim"; methodName = "Get your eSIM moved by your carrier"; }
+
+    var sections = [];
+
+    if(sim === "unsure"){
+      sections.push({ title:"First: find out your SIM type", items:[
+        { t:"Check if your current SIM is a card or an eSIM",
+          d:"On iPhone: Settings > General > About, and look under Available SIM or Mobile Service. On Android: Settings > About phone > SIM status. If you can pull a SIM card out of the side, it's physical. If your phone shows an EID number when you dial *#06#, it supports eSIM. If still unsure, ask your carrier." }
+      ]});
+    }
+    if(tray === "yes" && (sim === "unsure")){
+      sections[0].items.push({ t:"If your SIM turns out to be an eSIM, use the eSIM steps",
+        d:"The steps below assume a physical SIM card. If you have an eSIM, tap Start again and choose eSIM so you get the right steps." });
+    }
+
+    var before = [
+      { t:"Back up your old phone",
+        d: oldP.ios ? "Use iCloud Backup (Settings > your name > iCloud > iCloud Backup) or back up to a computer. Wait until it finishes."
+                    : "Use Google backup (Settings > Google > Backup) or your phone maker's tool such as Samsung Smart Switch. Wait until it finishes." },
+      { t:"List apps that use your number to log in",
+        d:"Banking, email, WhatsApp and other apps may text you a code. Add a backup login method or an authenticator app first, so you aren't locked out." },
+      { t:"Charge both phones and join Wi-Fi",
+        d:"Setting up the new phone works best with plenty of battery and a stable connection." },
+      { t:"Keep your old phone working until the new one is confirmed",
+        d:"Don't wipe, sell or hand in the old phone yet. You may need it if something goes wrong." }
+    ];
+    if(a.old === "iphone" && a.new !== "iphone"){
+      before.push({ t:"Turn off iMessage and FaceTime on the old iPhone",
+        d:"Settings > Messages > iMessage off, and Settings > FaceTime off. This stops texts from other iPhone users getting stuck. Do it while the SIM is still in the iPhone." });
+    }
+    if(a.old !== "iphone" && a.new === "iphone"){
+      before.push({ t:"Optional: use Apple's Move to iOS app for your data",
+        d:"It copies contacts, photos and messages to the iPhone during setup. It does not move your SIM or number." });
+    }
+    sections.push({ title:"Before you start", items:before });
+
+    var move = [];
+    if(method === "swap"){
+      move = [
+        { t:"Check the new phone takes the same SIM size",
+          d:"Nearly all current phones use a nano SIM. If your new phone needs a different size, ask your carrier for a replacement. Never cut a SIM yourself." },
+        { t:"Switch off both phones",
+          d:"This avoids damaging the SIM or losing signal settings." },
+        { t:"Remove the SIM from the old phone",
+          d:"Use the small ejector tool or a paperclip in the hole on the SIM tray. Pull the tray out gently." },
+        { t:"Put the SIM into the new phone",
+          d:"Place it the same way round, with the notched corner matching the tray. Push the tray back in fully." },
+        { t:"Switch on the new phone and wait for signal",
+          d:"This can take a minute. If it asks for a SIM PIN, enter it carefully. Three wrong tries locks the SIM and you'll need a PUK code from your carrier." }
+      ];
+    } else if(method === "iphone-esim"){
+      move = [
+        { t:"Update both iPhones to the latest iOS",
+          d:"Open Settings > General > Software Update on each. Keep them close together with Wi-Fi and Bluetooth on." },
+        { t:"Start the eSIM transfer on the new iPhone",
+          d:"During setup, or later in Settings > Mobile Service > Add eSIM > Transfer From Another iPhone. Then confirm on the old iPhone when it asks." },
+        { t:"If the transfer option isn't offered, use your carrier",
+          d:"Not every carrier supports it. Ask your carrier for a new eSIM QR code or activation in their app, then Settings > Mobile Service > Add eSIM on the new iPhone." },
+        { t:"Wait for activation",
+          d:"It usually takes a few minutes. Once the new eSIM is active, the old one stops working." }
+      ];
+    } else {
+      move = [
+        { t:"Check the new phone supports eSIM and isn't locked to another carrier",
+          d:"Look at the phone's spec page or ask the seller. A phone locked to a different network may refuse your eSIM." },
+        { t:"Ask your carrier to move your number to an eSIM on the new phone",
+          d:"Use your carrier's app, website, or a store. Tell them it's a new phone and you want an eSIM. They'll send a QR code or activate it through their app. Only use the carrier's official channels." },
+        { t:"Add the eSIM on the new phone", d: addEsimSteps(a.new) },
+        { t:"Wait for activation",
+          d:"It usually takes a few minutes, sometimes longer. Once the new eSIM is active, your old SIM stops working, so don't switch early if you need that phone for calls." }
+      ];
+    }
+    sections.push({ title:"Move your SIM: " + methodName, items:move });
+
+    var after = [
+      { t:"Test calls, texts and mobile data",
+        d:"Ring someone, send a text, and turn Wi-Fi off briefly to check data works. Also try Wi-Fi calling if you use it." },
+      { t:"Check your apps still work",
+        d:"Open banking, email and WhatsApp. Some will ask you to verify your number again. Do it now while you have your old phone as a backup." },
+      { t:"Only now, tidy up the old phone",
+        d: oldP.ios ? "Sign out of iCloud and Find My, then Settings > General > Transfer or Reset iPhone > Erase All Content and Settings."
+                    : "Remove your Google account and screen lock, then use Settings > System > Reset options > Erase all data (menu names vary)." }
+    ];
+    if(a.old === "iphone" && a.new !== "iphone"){
+      after.push({ t:"If texts from iPhone users don't arrive, deregister iMessage",
+        d:"Apple has an online tool called Deregister iMessage. Search for it and enter your number to receive a code." });
+    }
+    sections.push({ title:"After the switch", items:after });
+
+    var title = oldP.label + " to " + newP.label;
+    var simText = sim === "physical" ? "Physical SIM" : sim === "esim" ? "eSIM" : "SIM type to check";
+    var trayText = tray === "yes" ? "New phone has a SIM tray" : "New phone is eSIM only";
+    return {
+      title:title,
+      summary: method === "swap" ? "Good news: this is usually the simplest kind of switch. Take your time and follow the steps in order."
+              : method === "iphone-esim" ? "You can often move an eSIM directly between iPhones. If it isn't offered, your carrier can reissue it."
+              : "Because an eSIM is involved, your carrier has to approve the move. It's quick if you ask through their official app or store.",
+      pills:[simText, trayText, methodName],
+      sections:sections,
+      key:[a.old,a.new,a.sim,a.tray].join("|"),
+      warning:"Scam warning: never share SIM PINs, PUK codes or verification codes with anyone who contacts you first, even if they say they're your carrier. If your phone suddenly loses signal when you didn't expect it, contact your carrier from another phone, as this can be a sign of SIM-swap fraud."
+    };
+  }
+  /*PLAN_END*/
+
+  var QUESTIONS = [
+    { key:"old", title:"What phone do you have now?", sub:"The one you're switching from.",
+      opts:[["iphone","iPhone",""],["samsung","Samsung Galaxy",""],["pixel","Google Pixel",""],["other","Other Android","Xiaomi, OnePlus, Motorola, etc."]] },
+    { key:"new", title:"What phone are you getting?", sub:"The one you're switching to.",
+      opts:[["iphone","iPhone",""],["samsung","Samsung Galaxy",""],["pixel","Google Pixel",""],["other","Other Android","Xiaomi, OnePlus, Motorola, etc."]] },
+    { key:"sim", title:"How does your SIM work today?", sub:"You can usually tell: a card you can pull out is physical.",
+      opts:[["physical","A physical SIM card","A small card in a tray on the side of your phone"],["esim","An eSIM","Built into the phone, set up with a QR code or app"],["unsure","I'm not sure","We'll show you how to check"]] },
+    { key:"tray", title:"Does your new phone have a SIM tray?", sub:"Some newer phones are eSIM only. Check the phone's spec page if unsure.",
+      opts:[["yes","Yes, it has a SIM tray","You can put a SIM card in"],["no","No, it's eSIM only","No tray on the side"]] }
   ];
 
-  /* ---------- State ---------- */
   var $ = function(id){return document.getElementById(id);};
-  var state = { dest:null, tries:0, lockUntil:0, lockTimer:null, raf:null, running:false, startTs:0, history:[], show:false };
+  var answers = {}, step = 0, currentPlan = null, checks = {};
 
-  function load(){
-    try{ var h = JSON.parse(localStorage.getItem("pinn_hist")); if(Array.isArray(h)) return h; }catch(e){}
-    return SEED.slice();
+  function show(id){
+    var s = document.querySelectorAll(".screen");
+    for(var i=0;i<s.length;i++) s[i].classList.remove("active");
+    $(id).classList.add("active");
+    window.scrollTo(0,0);
   }
-  function save(){ try{ localStorage.setItem("pinn_hist", JSON.stringify(state.history)); }catch(e){} }
-  state.history = load();
+  function store(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function fetchStore(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
 
-  /* ---------- Navigation ---------- */
-  function go(id){
-    var all = document.querySelectorAll(".screen");
-    for(var i=0;i<all.length;i++) all[i].classList.remove("active");
-    var el = $(id); el.classList.add("active"); el.scrollTop = 0;
-  }
-  function openModal(id){ $(id).classList.add("show"); }
-  function closeModal(id){ $(id).classList.remove("show"); }
-
-  /* ---------- Home ---------- */
-  function fmtDate(ts){
-    return new Date(ts).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
-  }
-  function renderHistory(){
-    var box = $("history"); box.innerHTML = "";
-    if(!state.history.length){
-      var e = document.createElement("div"); e.className="empty"; e.textContent="No transfers yet. Start a demo above."; box.appendChild(e); return;
-    }
-    state.history.slice(0,5).forEach(function(h){
-      var row = document.createElement("div"); row.className="hist";
-      var cls = h.status==="success"?"ok":(h.status==="failed"?"fail":"cancel");
-      var sym = h.status==="success"?"✓":(h.status==="failed"?"!":"–");
-      var dot = document.createElement("div"); dot.className="dot "+cls; dot.textContent=sym;
-      var mid = document.createElement("div");
-      var t = document.createElement("div"); t.className="t"; t.textContent = "To "+h.dest;
-      var s = document.createElement("div"); s.className="s";
-      s.textContent = (h.status==="success"?"Completed":h.status==="failed"?"Failed":"Cancelled")+" (demo)"+(h.sample?" · sample":"");
-      mid.appendChild(t); mid.appendChild(s);
-      var r = document.createElement("div"); r.className="r";
-      r.textContent = fmtDate(h.ts); r.appendChild(document.createElement("br")); r.appendChild(document.createTextNode(h.id));
-      row.appendChild(dot); row.appendChild(mid); row.appendChild(r); box.appendChild(row);
-    });
-  }
-  function addHistory(status){
-    var d = DEVICES[state.dest];
-    state.history.unshift({ id:state.ref, dest:d.model, status:status, ts:Date.now() });
-    state.history = state.history.slice(0,20); save(); renderHistory();
-  }
-
-  /* ---------- PIN screen ---------- */
-  var inputs = [];
-  function buildDevices(){
-    var g = $("devgrid"); g.innerHTML="";
-    Object.keys(DEVICES).forEach(function(k){
-      var b = document.createElement("button"); b.type="button"; b.className="opt"; b.setAttribute("role","radio"); b.setAttribute("aria-checked","false"); b.dataset.k=k;
-      b.innerHTML = DEVICES[k].icon; var sp=document.createElement("span"); sp.textContent=DEVICES[k].label; b.appendChild(sp);
-      b.addEventListener("click", function(){ state.dest=k; markDevices(); setMsg(""); updateGo(); });
-      g.appendChild(b);
-    });
-  }
-  function markDevices(){
-    var bs = $("devgrid").children;
-    for(var i=0;i<bs.length;i++){
-      var on = bs[i].dataset.k===state.dest;
-      bs[i].classList.toggle("sel",on); bs[i].setAttribute("aria-checked",on?"true":"false");
-    }
-  }
-  function buildPins(){
-    var wrap=$("pins"); wrap.innerHTML=""; inputs=[];
-    for(var i=0;i<6;i++){
-      (function(i){
-        var inp=document.createElement("input");
-        inp.type="password"; inp.inputMode="numeric"; inp.autocomplete=(i===0?"one-time-code":"off");
-        inp.maxLength=1; inp.pattern="[0-9]*"; inp.setAttribute("aria-label","PIN digit "+(i+1));
-        inp.addEventListener("input", function(){
-          inp.value = inp.value.replace(/\D/g,"").slice(-1);
-          clearErr();
-          if(inp.value && i<5) inputs[i+1].focus();
-          updateGo();
-        });
-        inp.addEventListener("keydown", function(e){
-          if(e.key==="Backspace" && !inp.value && i>0){ inputs[i-1].focus(); inputs[i-1].value=""; updateGo(); }
-          else if(e.key==="ArrowLeft" && i>0) inputs[i-1].focus();
-          else if(e.key==="ArrowRight" && i<5) inputs[i+1].focus();
-          else if(e.key==="Enter" && !$("pin-go").disabled) submitPin();
-        });
-        inp.addEventListener("paste", function(e){
-          var t=(e.clipboardData||window.clipboardData).getData("text").replace(/\D/g,"").slice(0,6);
-          if(!t) return; e.preventDefault();
-          for(var j=0;j<6;j++) inputs[j].value=t[j]||"";
-          inputs[Math.min(t.length,5)].focus(); clearErr(); updateGo();
-        });
-        inp.addEventListener("focus", function(){ inp.select(); });
-        wrap.appendChild(inp); inputs.push(inp);
-      })(i);
-    }
-  }
-  function getPin(){ return inputs.map(function(i){return i.value;}).join(""); }
-  function clearPin(){ inputs.forEach(function(i){i.value="";}); }
-  function setMsg(t,err){ var m=$("pin-msg"); m.textContent=t; m.className="msg"+(err?" err":""); }
-  function clearErr(){ $("pins").classList.remove("error"); if($("pin-msg").classList.contains("err") && Date.now()>=state.lockUntil) setMsg(""); }
-  function locked(){ return Date.now()<state.lockUntil; }
-  function updateGo(){ $("pin-go").disabled = !(getPin().length===6 && state.dest && !locked()); }
-  function setPinDisabled(d){ inputs.forEach(function(i){i.disabled=d;}); }
-  function resetPinScreen(){
-    state.dest=null; state.tries=0; state.lockUntil=0; clearTimeout(state.lockTimer);
-    clearPin(); setPinDisabled(false); markDevices(); setMsg(""); $("pins").classList.remove("error"); updateGo();
-    state.show=false; $("pin-toggle").textContent="Show PIN"; inputs.forEach(function(i){i.type="password";});
-  }
-  function startLock(){
-    state.lockUntil = Date.now()+LOCK_MS; setPinDisabled(true); updateGo();
-    (function tick(){
-      var left = Math.ceil((state.lockUntil-Date.now())/1000);
-      if(left<=0){ state.tries=0; setPinDisabled(false); setMsg("You can try again now."); updateGo(); inputs[0].focus(); return; }
-      setMsg("Too many incorrect attempts. Try again in "+left+"s.", true);
-      state.lockTimer=setTimeout(tick,250);
-    })();
-  }
-  function submitPin(){
-    if(locked()) return;
-    if(!state.dest){ setMsg("Please choose a destination device first.", true); return; }
-    var pin=getPin();
-    if(pin.length!==6){ setMsg("Enter all 6 digits.", true); return; }
-    if(pin!==DEMO_PIN){
-      state.tries++;
-      var left = MAX_TRIES-state.tries;
-      $("pins").classList.add("error");
-      $("pins").classList.remove("shake"); void $("pins").offsetWidth; $("pins").classList.add("shake");
-      clearPin(); updateGo();
-      if(left<=0){ startLock(); }
-      else{ setMsg("Incorrect PIN. "+left+" attempt"+(left===1?"":"s")+" remaining.", true); inputs[0].focus(); }
-      return;
-    }
-    state.tries=0; startTransfer();
-  }
-
-  /* ---------- Transfer ---------- */
-  function buildSteps(){
-    var box=$("steps"); box.innerHTML="";
-    STEPS.forEach(function(s,i){
-      var row=document.createElement("div"); row.className="step"; row.id="step-"+i;
-      var ic=document.createElement("div"); ic.className="sicon"; ic.textContent=String(i+1);
-      var tx=document.createElement("div");
-      var a=document.createElement("div"); a.className="st"; a.textContent=s.t;
-      var b=document.createElement("div"); b.className="sd"; b.textContent=s.d;
-      tx.appendChild(a); tx.appendChild(b); row.appendChild(ic); row.appendChild(tx); box.appendChild(row);
-    });
-  }
-  function setStep(i,cls){
-    var el=$("step-"+i); el.className="step"+(cls?" "+cls:"");
-    var ic=el.firstChild;
-    ic.textContent = cls==="done"?"✓":cls==="failed"?"✕":String(i+1);
-  }
-  function genRef(){
-    var c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789", s="DEMO-";
-    for(var i=0;i<4;i++) s+=c[Math.floor(Math.random()*c.length)];
-    return s;
-  }
-  function setProgress(p){
-    p=Math.max(0,Math.min(100,p));
-    $("bar").style.width=p+"%"; $("pct").textContent=Math.floor(p)+"%";
-    $("bar-wrap").setAttribute("aria-valuenow",Math.floor(p));
-  }
-  function startTransfer(){
-    var d=DEVICES[state.dest];
-    state.ref=genRef(); state.startedAt=Date.now();
-    $("t-dest").textContent=d.model; $("t-dest-ico").innerHTML=d.icon;
-    $("beam").classList.remove("stopped");
-    buildSteps(); setProgress(0); $("pct-label").textContent="Starting…";
-    go("s-transfer");
-    state.running=true; state.startTs=performance.now(); state.cur=-1;
-    var willFail = $("outcome").value==="decline";
-    var failAt = STEPS[0].ms + STEPS[1].ms*0.6;      // fail partway through network approval
-    function frame(now){
-      if(!state.running) return;
-      var el = now-state.startTs;
-      if(willFail && el>=failAt){ finishFail(); return; }
-      var acc=0, idx=STEPS.length-1;
-      for(var i=0;i<STEPS.length;i++){ if(el<acc+STEPS[i].ms){ idx=i; break; } acc+=STEPS[i].ms; }
-      if(el>=TOTAL){ for(var k=0;k<STEPS.length;k++) setStep(k,"done"); setProgress(100); finishSuccess(); return; }
-      if(idx!==state.cur){
-        for(var j=0;j<idx;j++) setStep(j,"done");
-        setStep(idx,"active"); state.cur=idx; $("pct-label").textContent=STEPS[idx].t+"…";
+  function renderQuestion(){
+    var q = QUESTIONS[step];
+    $("q-title").textContent = q.title;
+    $("q-sub").textContent = q.sub;
+    var dots = $("dots"); dots.innerHTML = "";
+    for(var i=0;i<QUESTIONS.length;i++){ var d = document.createElement("i"); if(i<=step) d.className="on"; dots.appendChild(d); }
+    var box = $("q-opts"); box.innerHTML = "";
+    q.opts.forEach(function(o){
+      var b = document.createElement("button"); b.type="button"; b.className="opt";
+      if(q.key==="old" || q.key==="new"){
+        var ic = document.createElement("span"); ic.className="ic"; ic.textContent = PHONES[o[0]].icon; b.appendChild(ic);
       }
-      // smooth eased progress
-      var t=el/TOTAL; var eased=t<.5? 2*t*t : 1-Math.pow(-2*t+2,2)/2; var linear=t;
-      setProgress((eased*.35+linear*.65)*100);
-      state.raf=requestAnimationFrame(frame);
-    }
-    state.raf=requestAnimationFrame(frame);
+      var wrap = document.createElement("span");
+      wrap.appendChild(document.createTextNode(o[1]));
+      if(o[2]){ var sm = document.createElement("small"); sm.textContent = o[2]; wrap.appendChild(sm); }
+      b.appendChild(wrap);
+      b.addEventListener("click", function(){ answers[q.key] = o[0]; next(); });
+      box.appendChild(b);
+    });
+    show("s-q");
   }
-  function stopLoop(){ state.running=false; cancelAnimationFrame(state.raf); $("beam").classList.add("stopped"); }
-  function finishSuccess(){
-    stopLoop(); $("pct-label").textContent="Complete";
-    setTimeout(function(){ addHistory("success"); showResult("success"); }, 450);
+  function next(){
+    if(step < QUESTIONS.length-1){ step++; renderQuestion(); }
+    else { currentPlan = buildPlan(answers); store("vsim_last", answers); renderPlan(); }
   }
-  function finishFail(){
-    stopLoop(); setStep(state.cur<0?0:state.cur,"failed"); $("pct-label").textContent="Network declined (simulated)";
-    setTimeout(function(){ addHistory("failed"); showResult("failed"); }, 900);
-  }
-  function doCancel(){
-    stopLoop(); closeModal("m-cancel"); addHistory("cancelled"); showResult("cancelled");
+  function back(){
+    if(step > 0){ step--; renderQuestion(); } else show("s-home");
   }
 
-  /* ---------- Result ---------- */
-  function badge(kind){
-    var col = kind==="success"?"#34D399":kind==="failed"?"#F87171":"#FBBF24";
-    var inner = kind==="success" ? '<path class="tick" d="M34 54l12 12 24-26" stroke="'+col+'"/>'
-              : kind==="failed"  ? '<path class="tick" d="M38 38l28 28M66 38L38 66" stroke="'+col+'"/>'
-              :                    '<path class="tick" d="M40 52h24" stroke="'+col+'"/>';
-    var b=$("badge"); b.className="badge"+(kind==="success"?" ok":"");
-    b.innerHTML='<svg viewBox="0 0 104 104" aria-hidden="true"><circle class="ring" cx="52" cy="52" r="48" stroke="'+col+'" transform="rotate(-90 52 52)"/>'+inner+'</svg>';
+  function renderPlan(){
+    var p = currentPlan;
+    checks = fetchStore("vsim_checks_" + p.key) || {};
+    $("p-title").textContent = p.title;
+    $("p-sub").textContent = p.summary;
+    var pills = $("p-pills"); pills.innerHTML = "";
+    p.pills.forEach(function(t){ var s = document.createElement("span"); s.className="pill"; s.textContent=t; pills.appendChild(s); });
+    $("p-warn").textContent = p.warning;
+    var body = $("p-body"); body.innerHTML = "";
+    var total = 0;
+    p.sections.forEach(function(sec, si){
+      var wrap = document.createElement("div"); wrap.className="sec card";
+      var h = document.createElement("h3"); h.textContent = sec.title; wrap.appendChild(h);
+      sec.items.forEach(function(it, ii){
+        total++;
+        var id = si + "-" + ii;
+        var row = document.createElement("div"); row.className = "item" + (checks[id] ? " done" : "");
+        row.setAttribute("role","checkbox"); row.setAttribute("tabindex","0"); row.setAttribute("aria-checked", checks[id] ? "true":"false");
+        var c = document.createElement("div"); c.className="chk"; c.textContent="✓";
+        var tx = document.createElement("div");
+        var t = document.createElement("div"); t.className="t"; t.textContent = it.t;
+        var d = document.createElement("div"); d.className="d"; d.textContent = it.d;
+        tx.appendChild(t); tx.appendChild(d); row.appendChild(c); row.appendChild(tx);
+        function toggle(){
+          checks[id] = !checks[id];
+          row.classList.toggle("done", !!checks[id]);
+          row.setAttribute("aria-checked", checks[id] ? "true":"false");
+          store("vsim_checks_" + p.key, checks); updateProgress(total);
+        }
+        row.addEventListener("click", toggle);
+        row.addEventListener("keydown", function(e){ if(e.key===" " || e.key==="Enter"){ e.preventDefault(); toggle(); } });
+        wrap.appendChild(row);
+      });
+      body.appendChild(wrap);
+    });
+    p.total = total;
+    updateProgress(total);
+    show("s-plan");
   }
-  function row(k,v){
-    var r=document.createElement("div"); r.className="row";
-    var a=document.createElement("span"); a.textContent=k;
-    var b=document.createElement("span"); b.textContent=v;
-    r.appendChild(a); r.appendChild(b); return r;
-  }
-  function btn(txt,cls,fn){
-    var b=document.createElement("button"); b.className="btn"+(cls?" "+cls:""); b.textContent=txt; b.addEventListener("click",fn); return b;
-  }
-  function showResult(kind){
-    var d=DEVICES[state.dest];
-    badge(kind);
-    var title=$("r-title"), sub=$("r-sub"), sum=$("r-summary"), note=$("r-note"), act=$("r-actions");
-    sum.innerHTML=""; act.innerHTML="";
-    var statusTxt = kind==="success"?"Completed (simulated)":kind==="failed"?"Failed (simulated)":"Cancelled by you";
-    if(kind==="success"){
-      title.textContent="Transfer simulated"; sub.textContent="Your demo SIM is now “active” on "+d.model+". Nothing real changed.";
-      note.textContent="PROTOTYPE: no real eSIM was created and no network approved anything.";
-      confetti();
-    }else if(kind==="failed"){
-      title.textContent="Transfer didn’t complete"; sub.textContent="The simulated network declined the request. Your demo connection stays on "+SOURCE.name+".";
-      note.textContent="This error was triggered by the “Network declines” demo option. You can retry with a different outcome.";
-    }else{
-      title.textContent="Transfer cancelled"; sub.textContent="Nothing was changed. Your demo connection stays on "+SOURCE.name+".";
-      note.textContent="You can start another demo whenever you like.";
-    }
-    sum.appendChild(row("Status",statusTxt));
-    sum.appendChild(row("From",SOURCE.name));
-    sum.appendChild(row("To",d.model));
-    sum.appendChild(row("Network",SOURCE.network+" (example)"));
-    sum.appendChild(row("Number",SOURCE.number+" (sample)"));
-    sum.appendChild(row("Reference",state.ref));
-    sum.appendChild(row("Time",new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})));
-    if(kind==="failed") act.appendChild(btn("Try again","",function(){ resetPinScreen(); go("s-pin"); }));
-    act.appendChild(btn(kind==="success"?"Done":"Back to home",kind==="success"?"":"ghost",function(){ go("s-home"); }));
-    if(kind!=="failed") act.appendChild(btn("Start another demo","ghost",function(){ resetPinScreen(); go("s-pin"); }));
-    go("s-done");
-  }
-  function confetti(){
-    var cols=["#22D3EE","#3B82F6","#34D399","#EAF2FF"];
-    for(var i=0;i<36;i++){
-      var c=document.createElement("div"); c.className="confetti";
-      c.style.left=Math.random()*100+"vw"; c.style.background=cols[i%cols.length];
-      c.style.animationDuration=(1.8+Math.random()*1.8)+"s"; c.style.animationDelay=(Math.random()*.5)+"s";
-      document.body.appendChild(c);
-      (function(c){ setTimeout(function(){ c.remove(); },4200); })(c);
-    }
+  function updateProgress(total){
+    var n = 0; for(var k in checks){ if(checks[k]) n++; }
+    $("p-count").textContent = n + " of " + total + " steps done";
+    $("p-bar").style.width = (total ? Math.round(n/total*100) : 0) + "%";
   }
 
-  /* ---------- Wire up ---------- */
-  buildDevices(); buildPins(); renderHistory();
-
-  $("btn-start").addEventListener("click", function(){ resetPinScreen(); go("s-pin"); });
-  $("pin-back").addEventListener("click", function(){ go("s-home"); });
-  $("pin-cancel").addEventListener("click", function(){ go("s-home"); });
-  $("pin-go").addEventListener("click", submitPin);
-  $("pin-toggle").addEventListener("click", function(){
-    state.show=!state.show; inputs.forEach(function(i){ i.type=state.show?"text":"password"; });
-    this.textContent=state.show?"Hide PIN":"Show PIN";
+  $("go").addEventListener("click", function(){ answers = {}; step = 0; renderQuestion(); });
+  $("q-back").addEventListener("click", back);
+  $("p-back").addEventListener("click", function(){ step = QUESTIONS.length-1; renderQuestion(); });
+  $("p-reset").addEventListener("click", function(){ checks = {}; store("vsim_checks_" + currentPlan.key, checks); renderPlan(); });
+  $("p-restart").addEventListener("click", function(){ answers = {}; step = 0; renderQuestion(); });
+  $("resume").addEventListener("click", function(){
+    var a = fetchStore("vsim_last");
+    if(a && a.old && a.new && a.sim && a.tray){ answers = a; currentPlan = buildPlan(a); renderPlan(); }
   });
-  $("t-cancel").addEventListener("click", function(){ openModal("m-cancel"); });
-  $("c-no").addEventListener("click", function(){ closeModal("m-cancel"); });
-  $("c-yes").addEventListener("click", doCancel);
-  $("btn-how").addEventListener("click", function(){ openModal("m-how"); });
-  $("how-close").addEventListener("click", function(){ closeModal("m-how"); });
-  ["m-how","m-cancel"].forEach(function(id){
-    $(id).addEventListener("click", function(e){ if(e.target===this) closeModal(id); });
-  });
-  $("btn-clear").addEventListener("click", function(){
-    state.history=SEED.map(function(s){return Object.assign({},s);}); save(); renderHistory();
-  });
-  document.addEventListener("keydown", function(e){
-    if(e.key==="Escape"){ closeModal("m-how"); if($("m-cancel").classList.contains("show")) closeModal("m-cancel"); }
-  });
+  var last = fetchStore("vsim_last");
+  if(last && last.old && last.new && last.sim && last.tray){ $("resume-row").style.display = "flex"; }
 })();
 </script>
 </body>
 </html>
-
-</body></html>
